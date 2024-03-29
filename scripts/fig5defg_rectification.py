@@ -1,21 +1,29 @@
 """
 Inward rectification by CP-AMPARs
 """
-
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import cmasher as cmr  # colormap
 import seaborn as sns
+import pandas as pd
 from src.constants import pink, green
 from src.metrics import compute_osi
 from src.simulation import simulate_with_conductance, weight_scale
 from src.constants import amplitude, slope, midpoint, reversal
 from src.constants import scaling_egfp, scaling_glua2
 from src.constants import figdir, stylesheet
+from src.utils import write_excel
 
 sns.set_context("poster")
 sns.set_palette("colorblind")
 plt.style.use(stylesheet)
+
+# collecting/saving data:
+save_path = "results/Source Data Fig. 5.xlsx"
+data_frames = {}
+for panel in ['d', 'e', 'f', 'g']:
+    data_frames[panel] = pd.DataFrame()
 
 # Amplification function
 rate = np.arange(0, 10, 0.1)  # PV rate/voltage
@@ -46,6 +54,9 @@ ax[0].annotate(
     arrowprops=dict(arrowstyle="->", lw=0.5, connectionstyle="arc3", color="gray"),
 )
 ax[0].text(midpoint - 0.4, 0.5, "M", color="gray", rotation=0)
+# dataframes for writing data
+data_frames['d']["rate"] = rate
+data_frames['d']['scale'] = weight_scale(rate, midpoint, slope, scaling_egfp)
 
 
 # Compare tuning
@@ -75,6 +86,11 @@ for i, (block, color, label, scaling) in enumerate(
 
     ax[1].plot(stimuli, rates[-1], color=color)
     ax[2].plot(stimuli, rates[-1] / rates[-1].max(), color=color)
+    # for saving data
+    data_frames['e']['stimuli'] = stimuli
+    data_frames['e'][f'rates {label}'] = rates[-1]
+    data_frames['f']['stimuli'] = stimuli
+    data_frames['f'][f'rates (norm) {label}'] = rates[-1] / rates[-1].max()
 
 for i in [1, 2]:
     ticks = np.array([-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi])
@@ -117,6 +133,8 @@ no_osi = compute_osi(stimuli, rates[-1])
 
 # Fig: OSI without rectification - osi with
 pl = plt.pcolor(no_osi - osis, cmap="cmr.guppy_r")
+# save data
+data_frames['g'] = pd.DataFrame(no_osi - osis, index = thresholds, columns = scales)
 plt.scatter(
     np.argmin(np.abs(scales - amplitude)),
     np.argmin(np.abs(thresholds - midpoint)),
@@ -134,3 +152,9 @@ cbar.set_label(r"$\Delta$ OSI", fontsize=7, rotation=90)
 
 plt.tight_layout()
 plt.savefig(figdir + "fig5defg_rectification.png", dpi=300)
+
+# Save data
+write_excel(save_path, data_frames)
+
+
+

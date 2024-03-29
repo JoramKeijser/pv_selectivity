@@ -1,7 +1,7 @@
 """
 Rates for network icon
 """
-
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -10,11 +10,17 @@ from src.simulation import network
 from src.constants import blue, pink
 from src.constants import kappa_pre, alpha_pre, kappa_w, alpha_w, n_pre, n_stim
 from src.constants import figdir, stylesheet
+from src.utils import write_excel
 
 sns.set_context("poster")
 sns.set_palette("colorblind")
 plt.style.use(stylesheet)
 
+# collecting/saving data:
+save_path = "results/Source Data Fig. 5.xlsx"
+data_frames = {}
+for panel in ['b', 'c']: # Panel a is the circuit diagram
+    data_frames[panel] = pd.DataFrame()
 
 stimuli, pre_tuning, pre_rates, pre_rates_multi, weights, post_rates = network(
     kappa_pre, alpha_pre, kappa_w, alpha_w, n_pre, n_stim, verbose=False
@@ -78,13 +84,11 @@ plt.tight_layout()
 plt.savefig(figdir + "fig5bc_network.png", dpi=300)
 
 # Save data: Pyr-PV weights, and rates
-df_weights = pd.DataFrame()
-df_weights["direction"] = pre_tuning
-df_weights["weights"] = weights
-df_rates = pd.DataFrame()
-df_rates["direction"] = pre_tuning
-df_rates["pyr_rates"] = pre_rates
-df_rates["pv_rates"] = post_rates
-with pd.ExcelWriter("results/figure5.xlsx") as writer:
-    df_weights.to_excel(writer, sheet_name="b")
-    df_rates.to_excel(writer, sheet_name="c")
+data_frames['b']["direction"] = pre_tuning
+data_frames['b']["weights"] = weights
+data_frames['c']["direction"] = pre_tuning
+data_frames['c']["pyr_rates"] = pre_rates
+data_frames['c']["pv_rates"] = post_rates
+
+write_excel(save_path, data_frames)
+

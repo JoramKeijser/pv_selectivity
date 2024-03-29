@@ -1,7 +1,6 @@
 """
 Simulate mixture of conductances
 """
-
 import numpy as np
 import matplotlib.pyplot as plt
 import cmasher as cmr
@@ -12,10 +11,16 @@ from src.constants import V_reversal, V_cutoff
 from src.constants import figdir, stylesheet
 from src.metrics import compute_osi
 from src.simulation import scaling_fn, simulate_empirical_conductance
+from src.utils import write_excel
 
 sns.set_context("poster")
 sns.set_palette("colorblind")
 plt.style.use(stylesheet)
+# collecting/saving data:
+save_path = "results/Source Data Extended Data Fig. 26.xlsx"
+data_frames = {}
+for panel in ['a', 'b', 'c', 'd', 'e', 'f']:
+    data_frames[panel] = pd.DataFrame()
 
 # Load the data
 df = pd.read_excel(
@@ -47,6 +52,9 @@ ax[0].set_ylabel("Current (norm.)")
 ax[0].set_ylim([-0.05, 1.05])
 ax[0].set_xticks([-60, -40, -20])
 ax[0].set_yticks([0, 0.5, 1])
+data_frames['a']['voltage'] = np.array(voltage)
+data_frames['a']['Current KO'] = np.array(I_KO)
+data_frames['a']['Current WT'] = np.array(I_WT)
 
 
 # Estimated conductance
@@ -59,6 +67,9 @@ ax[1].set_ylabel("Conductance (norm.)")
 ax[1].set_ylim([-0.05, 1.05])
 ax[1].set_xticks([-60, -40, -20])
 ax[1].set_yticks([0, 0.5, 1])
+data_frames['b']['voltage'] = np.array(voltage)
+data_frames['b']['Conductance KO'] =  np.array((I_KO / (V_reversal - voltage) - m) / (M - m))
+data_frames['b']['Conductance WT'] = np.array(I_WT / (V_reversal - voltage) / M_WT)
 
 # Scaling functions
 labels = ["0CP + 1CI (GluA2)", "0.8CP + 0.2CI (eGFP)"]
@@ -79,6 +90,9 @@ ax[2].plot(
     label=labels[1],
     color=colors[1],
 )
+data_frames['c']['rate'] = plot_rates
+data_frames['c'][f'scale {labels[0]}'] = scaling_fn(plot_rates, 0, df, I_WT, I_KO, M_WT, M, m)
+data_frames['c'][f'scale {labels[1]}'] = scaling_fn(plot_rates, 0.8, df, I_WT, I_KO, M_WT, M, m)
 ax[2].set_xlabel("Rate (1/s)")
 ax[2].set_ylabel("Weight scaling")
 ax[2].set_ylim([-0.05, 1.05])
@@ -87,19 +101,22 @@ ax[2].set_xlim([0, 10])
 fig.tight_layout()
 plt.savefig(figdir + "fig26abc_rectification.png", dpi=300)
 
-# Simulate
-fig, ax = plt.subplots(1, 3, figsize=(4.7, 1.3), sharey=False)
+# Bottom panels
 
+fig, ax = plt.subplots(1, 3, figsize=(4.7, 1.3), sharey=False)
 for alpha, color in zip([0, 0.8], [green, pink]):
     stimuli, pre_rates, rates, _ = simulate_empirical_conductance(
         df, I_WT, I_KO, M_WT, M, m, alpha
     )
     ax[0].plot(stimuli * 180 / np.pi, rates[-1], color=color)
     ax[1].plot(stimuli * 180 / np.pi, rates[-1] / rates[-1].max(), color=color)
+    data_frames['d']['stimulus'] = stimuli
+    data_frames['d']['rate'] = rates[-1]
+    data_frames['e']['stimulus'] = stimuli
+    data_frames['e']['rate (norm)'] = rates[-1] / rates[-1].max()
 
 ax[0].set_ylim([0, 7])
 ax[1].set_ylim([0, 1.1])
-
 
 alphas = np.arange(0, 1.01, 0.01)
 osis = np.zeros((len(alphas),))
@@ -115,7 +132,8 @@ for i, alpha in enumerate(alphas):
         ax[2].scatter(alpha, osis[i], color=pink)
         print(f"OSI eGFP: {osis[i]:0.2f}")
 ax[2].plot(alphas, osis, color="grey")
-
+data_frames['f']['alpha'] = alphas
+data_frames['f']['OSI'] = osis
 
 ax[2].set_xlabel(r"CP-AMPAR coefficient $\alpha$")
 ax[-1].set_ylim([0.3, 0.6])
@@ -132,3 +150,4 @@ ax[1].set_ylabel("Rate (norm.)")
 
 fig.tight_layout()
 plt.savefig(figdir + "fig26def_rectification.png", dpi=300)
+write_excel(save_path, data_frames) # save data

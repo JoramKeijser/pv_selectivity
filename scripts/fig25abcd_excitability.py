@@ -11,8 +11,15 @@ from src.simulation import relu, simulate
 from src.constants import pink, green, I_example
 from src.constants import figdir, datadir, stylesheet
 from src.metrics import compute_osi
+from src.utils import write_excel
 
 plt.style.use(stylesheet)
+
+# collecting/saving data:
+save_path = "results/Source Data Extended Data Fig. 25.xlsx"
+data_frames = {}
+for panel in ['a', 'b', 'c', 'd']:
+    data_frames[panel] = pd.DataFrame()
 
 # Load data. 'Aver.' and 'Aver.1 columsn are control and GluA2 mice, respectively
 df = pd.read_excel(
@@ -22,7 +29,6 @@ df = pd.read_excel(
     nrows=16,
     index_col=0,
 )
-
 
 def control_fi(x):
     # Fit the increase in excitability. Use interpolation to compare the two datasets
@@ -61,7 +67,11 @@ ax[0].plot(
     linestyle=":",
     alpha=0.9,
 )
-
+data_frames['a']['current'] = np.array(df.index)
+data_frames['a']['frequency PV'] = np.array(df['Aver'])
+data_frames['a']['frequency GluA2'] = np.array(df['Aver.1'])
+# Fit
+data_frames['a']['Fitted shift'] =  best_shift
 
 # Indicate shift with arrow
 x0 = 10
@@ -82,7 +92,8 @@ for i, (I0, label, color, linestyle) in enumerate(
     zip([0, 0.4], ["Control", "GluA2"], [pink, green], ["-", "-"])
 ):
     ax[1].plot(x, relu(x + I0), color=color, linestyle=linestyle)
-
+    data_frames['b']['current'] = x
+    data_frames['b'][f'rate + {label}'] = relu(x + I0)
 
 # Axes
 ax[0].set_xlabel("Current Injected (pA)")
@@ -103,6 +114,8 @@ for i, (I0, color, label) in enumerate(
 
     # ax[2].plot(stimuli, rates[-1] / rates[-1].max(), color=color)
     ax[2].plot(stimuli, rates[-1], color=color)
+    data_frames['c']['stimulus'] = stimuli
+    data_frames['c'][f'rate + {label}'] = rates[-1]
 
 ticks = np.array([-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi])
 ax[2].set_xticks(ticks, np.array(ticks * 180 / np.pi, dtype=int))
@@ -112,6 +125,7 @@ ax[2].set_ylabel("Rate (norm)")
 
 # Simulate for a range of excitability/input increases
 inputs = np.arange(0, 11, 1)
+data_frames['d'].index = inputs
 epsp_scales = [1, 0.62]  # baseline and empirical
 osis = np.zeros((len(inputs), 2))  # save orientation selectivit indices
 for j, scale in enumerate(epsp_scales):
@@ -121,6 +135,7 @@ for j, scale in enumerate(epsp_scales):
         if scale == 1 and I0 in [I_example, 0]:
             print(f"OSI I0={I0:0.2f}: {osis[i,j]:0.2f}")
 
+    data_frames['d'][f'EPSP scale {scale}'] = osis[:,j]
 
 # Make the figure
 for j, color in zip([0, 1], ["gray", "black"]):
@@ -137,3 +152,5 @@ plt.xticks([0, 5, 10])
 
 fig.tight_layout()
 plt.savefig(figdir + "fig25abcd_excitability.png", dpi=300)
+
+write_excel(save_path, data_frames)
