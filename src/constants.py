@@ -40,9 +40,6 @@ control_th = 8 # Example
 increased_th = 10
 min_th = 6.5 # For sweep
 max_th = 11
-# for LTP-dominated rule with 3 zeros
-theta_lo = 6 # 2nd zero LTD -> TLP
-theta_hi = 20 # 3rd zero: LTP -> LTD
 
 # Excitability
 I_example = 4
