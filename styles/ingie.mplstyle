@@ -1,0 +1,17 @@
+# Style sheet following Ingie's plotting guide
+
+lines.linewidth : 1 
+axes.linewidth : .5 
+axes.labelsize : 7 # set the value globally
+xtick.major.size : 1 # length
+ytick.major.size : 1
+ytick.major.pad : 0.5
+xtick.major.pad : 0.5
+xtick.major.width : .5 #thickness
+ytick.major.width : .5
+xtick.labelsize : 7
+ytick.labelsize : 7
+font.size : 7
+axes.spines.top:  False
+axes.spines.right:  False
+lines.markersize : 3
