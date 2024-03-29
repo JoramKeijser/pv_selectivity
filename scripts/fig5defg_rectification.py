@@ -11,12 +11,11 @@ from src.metrics import compute_osi
 from src.simulation import simulate_with_conductance, weight_scale
 from src.constants import amplitude, slope, midpoint, reversal
 from src.constants import scaling_egfp, scaling_glua2
+from src.constants import figdir, stylesheet
 
 sns.set_context("poster")
 sns.set_palette("colorblind")
-plt.style.use("styles/ingie.mplstyle")
-figdir = "figures/"
-
+plt.style.use(stylesheet)
 
 # Amplification function
 rate = np.arange(0, 10, 0.1)  # PV rate/voltage

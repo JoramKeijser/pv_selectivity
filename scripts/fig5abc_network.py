@@ -9,11 +9,11 @@ import pandas as pd
 from src.simulation import network
 from src.constants import blue, pink
 from src.constants import kappa_pre, alpha_pre, kappa_w, alpha_w, n_pre, n_stim
+from src.constants import figdir, stylesheet
 
 sns.set_context("poster")
 sns.set_palette("colorblind")
-plt.style.use("styles/ingie.mplstyle")
-figdir = "figures/"
+plt.style.use(stylesheet)
 
 
 stimuli, pre_tuning, pre_rates, pre_rates_multi, weights, post_rates = network(

@@ -10,15 +10,15 @@ import seaborn as sns
 from scipy.optimize import minimize_scalar
 from src.simulation import network, steady_state, relu
 from src.constants import pink, green
+from src.constants import figdir, stylesheet
 from src.metrics import compute_osi
 from src.constants import kappa_pre, alpha_pre, kappa_w, alpha_w, n_pre, n_stim
 
 sns.set_context("poster")
 sns.set_palette("colorblind")
-plt.style.use("styles/ingie.mplstyle")
-figdir = "figures/"
-fig, ax = plt.subplots(1, 4, figsize=(6.2, 1.3), sharey=False)
+plt.style.use(stylesheet)
 
+fig, ax = plt.subplots(1, 4, figsize=(6.2, 1.3), sharey=False)
 
 stimuli, pre_tuning, pre_rates, pre_rates_multi, weights, post_rates = network(
     kappa_pre, alpha_pre, kappa_w, alpha_w, n_pre, n_stim, verbose=False

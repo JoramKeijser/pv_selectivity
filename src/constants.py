@@ -1,4 +1,8 @@
 # Parameter values
+figdir = "figures/" # where to save figs
+datadir = "data/" # where to load data from
+resdir = "results/"
+stylesheet = "styles/ingie.mplstyle" # fig formatting
 
 # Colors
 blue = "#809fff"

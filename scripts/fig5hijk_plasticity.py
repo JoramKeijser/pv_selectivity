@@ -8,15 +8,15 @@ import seaborn as sns
 from src.constants import pink, green
 from src import constants
 from src.constants import lr, control_th, increased_th, min_th, max_th, Tplasticity
+from src.constants import figdir, stylesheet
 from src.simulation import bcm_update, simulate_with_plasticity
 from src.metrics import compute_osi
 
 sns.set_context("poster")
 sns.set_palette("colorblind")
-plt.style.use("styles/ingie.mplstyle")
-figdir = "figures/"
-fig, ax = plt.subplots(1, 4, figsize=(6.2, 1.3), sharey=False)
+plt.style.use(stylesheet)
 
+fig, ax = plt.subplots(1, 4, figsize=(6.2, 1.3), sharey=False)
 
 # Show the plasticity rule
 pre = 1

@@ -9,14 +9,13 @@ import seaborn as sns
 import pandas as pd
 from src.constants import pink, green, blue, min_rate, max_rate
 from src.constants import V_reversal, V_cutoff
+from src.constants import figdir, stylesheet
 from src.metrics import compute_osi
 from src.simulation import scaling_fn, simulate_empirical_conductance
 
 sns.set_context("poster")
 sns.set_palette("colorblind")
-plt.style.use("styles/ingie.mplstyle")
-figdir = "figures/"
-size = 200
+plt.style.use(stylesheet)
 
 # Load the data
 df = pd.read_excel(

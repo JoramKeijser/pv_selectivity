@@ -9,11 +9,10 @@ from scipy.optimize import minimize_scalar
 from scipy.interpolate import interp1d
 from src.simulation import relu, simulate
 from src.constants import pink, green, I_example
+from src.constants import figdir, datadir, stylesheet
 from src.metrics import compute_osi
 
-plt.style.use("styles/ingie.mplstyle")
-figdir = "figures/"
-datadir = "data/"
+plt.style.use(stylesheet)
 
 # Load data. 'Aver.' and 'Aver.1 columsn are control and GluA2 mice, respectively
 df = pd.read_excel(
