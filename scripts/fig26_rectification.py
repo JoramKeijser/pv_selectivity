@@ -162,7 +162,7 @@ ax[2].plot(alphas, osis, color="grey")
 data_frames["f"]["alpha"] = alphas
 data_frames["f"]["OSI"] = osis
 
-ax[2].set_xlabel(r"CP-AMPAR coefficient $\alpha$")
+ax[2].set_xlabel(r"CP-AMPAR coefficient $\lambda$")
 ax[-1].set_ylim([0.3, 0.6])
 ax[-1].set_yticks([0.3, 0.6])
 ax[0].set_xlabel("Rate (1/s)")
