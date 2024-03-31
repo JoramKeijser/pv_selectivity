@@ -80,7 +80,7 @@ for i in [1, 2]:
 
 ax[2].set_yticks([0, 5, 10, 15])
 ax[2].set_ylabel("Rate (1/s)")
-ax[1].set_ylabel("Synaptic strength")
+ax[1].set_ylabel("Weight")
 
 print("LTD threshold : OSI")
 thresholds = np.arange(min_th, max_th, dtype=float, step=0.25)
