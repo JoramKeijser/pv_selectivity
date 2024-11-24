@@ -1,0 +1,152 @@
+name: pv
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - anyio
+  - argon2-cffi
+  # - argon2-cffi-bindings # Removed for compatibility
+  - arrow
+  - asttokens
+  - async-lru
+  - attrs
+  - babel
+  - beautifulsoup4
+  - bleach
+  - cached-property
+  - cached_property
+  - certifi
+  - cffi
+  - charset-normalizer
+  - cmasher
+  - comm
+  # - contourpy # Removed for compatibility
+  - cycler
+  - debugpy
+  - decorator
+  - defusedxml
+  - entrypoints
+  - et_xmlfile
+  - exceptiongroup
+  - executing
+  - font-ttf-dejavu-sans-mono
+  - font-ttf-inconsolata
+  - font-ttf-source-code-pro
+  - font-ttf-ubuntu
+  - fonts-conda-ecosystem
+  - fonts-conda-forge
+  - fonttools
+  - fqdn
+  - idna
+  - importlib-metadata
+  - importlib_metadata
+  - importlib_resources
+  - ipykernel
+  - ipython
+  - isoduration
+  - jedi
+  - jinja2
+  - json5
+  # - jsonpointer # Removed for compatibility
+  - jsonschema
+  - jsonschema-specifications
+  - jsonschema-with-format-nongpl
+  - jupyter-lsp
+  - jupyter_client
+  # - jupyter_core # Removed for compatibility
+  - jupyter_events
+  - jupyter_server
+  - jupyter_server_terminals
+  - jupyterlab
+  - jupyterlab_pygments
+  - jupyterlab_server
+  # - kiwisolver # Removed for compatibility
+  # - lcms2 # Removed for compatibility
+  # - lerc # Removed for compatibility
+  # - libbrotlidec # Removed for compatibility
+  # - libdeflate # Removed for compatibility
+  # - libffi # Removed for compatibility
+  # - libgfortran-ng # Removed for compatibility
+  # - libgfortran5 # Removed for compatibility
+  # - liblapack # Removed for compatibility
+  # - libopenblas # Removed for compatibility
+  # - libpng # Removed for compatibility
+  # - libsodium # Removed for compatibility
+  # - libzlib # Removed for compatibility
+  - markupsafe
+  - matplotlib
+  # - matplotlib-base # Removed for compatibility
+  - matplotlib-inline
+  - mistune
+  - munkres
+  - nbclient
+  - nbconvert-core
+  - nbformat
+  - nest-asyncio
+  - notebook-shim
+  - numpy
+  - openpyxl
+  - overrides
+  - packaging
+  - pandas
+  - pandocfilters
+  - parso
+  - patsy
+  - pexpect
+  - pickleshare
+  # - pillow # Removed for compatibility
+  - pip
+  - pkgutil-resolve-name
+  - platformdirs
+  - ply
+  - prometheus_client
+  - prompt-toolkit
+  - pure_eval
+  - pycparser
+  - pygments
+  - pyparsing
+  # - pyqt # Removed for compatibility
+  # - pyqt5-sip # Removed for compatibility
+  - pysocks
+  - python
+  - python-dateutil
+  - python-fastjsonschema
+  - python-json-logger
+  - python-tzdata
+  - python_abi
+  - pytz
+  - pyyaml
+  # - pyzmq # Removed for compatibility
+  # - qt-main # Removed for compatibility
+  - referencing
+  - requests
+  - rfc3339-validator
+  - rfc3986-validator
+  - seaborn
+  - seaborn-base
+  - send2trash
+  - setuptools
+  # - sip # Removed for compatibility
+  - six
+  - sniffio
+  - soupsieve
+  - stack_data
+  # - statsmodels # Removed for compatibility
+  - terminado
+  - tinycss2
+  - toml
+  - tomli
+  - tornado
+  - traitlets
+  - types-python-dateutil
+  - typing-extensions
+  - typing_extensions
+  - typing_utils
+  - tzdata
+  - uri-template
+  - urllib3
+  - wcwidth
+  - webcolors
+  - webencodings
+  - websocket-client
+  - wheel
