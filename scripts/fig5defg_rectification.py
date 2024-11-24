@@ -15,6 +15,15 @@ from src.constants import scaling_egfp, scaling_glua2
 from src.constants import figdir, stylesheet
 from src.utils import write_excel
 
+# Added code to plot with Arial font in Windows
+import matplotlib
+from matplotlib import rc
+matplotlib.rcParams['pdf.fonttype'] = 42
+rc('font', **{'family': 'serif', 'serif': ['Arial']})
+# matplotlib.rcParams['font.family']='san-serif'
+# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+# rc('text', usetex=True)
+
 sns.set_context("poster")
 sns.set_palette("colorblind")
 plt.style.use(stylesheet)
@@ -27,7 +36,7 @@ for panel in ['d', 'e', 'f', 'g']:
 
 # Amplification function
 rate = np.arange(0, 10, 0.1)  # PV rate/voltage
-fig, ax = plt.subplots(1, 4, figsize=(6.2, 1.3), sharey=False)
+fig, ax = plt.subplots(1, 4, figsize=(5.1, 1.3), sharey=False)
 ax[0].plot(rate, weight_scale(rate, midpoint, slope, scaling_egfp), color=pink)
 ax[0].hlines(1, rate.min(), rate.max(), color=green, linestyle="-.")
 ax[0].set_ylim([-0.1, amplitude * 1.1])
@@ -35,6 +44,7 @@ ax[0].set_xlabel("Rate (1/s)")
 ax[0].set_ylabel("Weight scale")
 ax[0].set_xticks([0, 5, 10])
 ax[0].set_yticks([0, 1, 2])
+ax[0].tick_params(axis='both', which='major', labelsize=5)
 # Annotate amp and midpoint
 ax[0].annotate(
     "",
@@ -44,7 +54,7 @@ ax[0].annotate(
     textcoords="data",
     arrowprops=dict(arrowstyle="->", lw=0.5, connectionstyle="arc3", color="gray"),
 )
-ax[0].text(midpoint - 0.4, amplitude - 0.1, "A", color="gray", rotation=0)
+ax[0].text(midpoint - 0.4, amplitude - 0.1, "A", color="gray", rotation=0, fontsize=5)
 ax[0].annotate(
     "",
     xy=(midpoint, 0),
@@ -53,8 +63,8 @@ ax[0].annotate(
     textcoords="data",
     arrowprops=dict(arrowstyle="->", lw=0.5, connectionstyle="arc3", color="gray"),
 )
-ax[0].text(midpoint - 0.4, 0.5, "M", color="gray", rotation=0)
-# dataframes for writing data
+ax[0].text(midpoint - 0.4, 0.5, "M", color="gray", rotation=0, fontsize=5)
+# Dataframes for writing data
 data_frames['d']["rate"] = rate
 data_frames['d']['scale'] = weight_scale(rate, midpoint, slope, scaling_egfp)
 
@@ -95,7 +105,8 @@ for i, (block, color, label, scaling) in enumerate(
 for i in [1, 2]:
     ticks = np.array([-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi])
     ax[i].set_xticks(ticks, np.array(ticks * 180 / np.pi, dtype=int))
-    ax[i].set_xlabel(r"Stim. direction ($\Delta^\circ$)")
+    ax[i].set_xlabel(r"Stim. direction (Δ°)", fontsize=7)
+    ax[i].tick_params(axis='both', which='major', labelsize=5)
 
 ax[1].set_ylim([0, 11])
 ax[2].set_yticks([0, 0.5, 1])
@@ -103,6 +114,8 @@ ax[2].set_ylim([0, 1.05])
 ax[1].set_ylabel("Rate (1/s)")
 ax[2].set_ylabel("Rate (norm)")
 
+ax[1].tick_params(axis='both', which='major', labelsize=5)
+ax[2].tick_params(axis='both', which='major', labelsize=5)
 
 # Robustness
 scales = np.linspace(1, 4, 20, endpoint=True)
@@ -143,18 +156,19 @@ plt.scatter(
 )
 plt.ylabel(r"Midpoint M (1/s)")
 plt.xlabel(r"Amplitude A")
-plt.xticks([1, len(scales)], [1, scales[-1]])
-plt.yticks([0, len(thresholds)], [0, thresholds[-1]])
+plt.xticks([1, len(scales)], [1, scales[-1]], fontsize=5)
+plt.yticks([0, len(thresholds)], [0, thresholds[-1]], fontsize=5)
+plt.tick_params(axis='both', which='major', labelsize=5)
 cbar = plt.colorbar(pl)
 if np.max(no_osi - osis) > 0.25:
     cbar.set_ticks([0, 0.1, 0.2, 0.3])
-cbar.set_label(r"$\Delta$ OSI", fontsize=7, rotation=90)
+cbar.set_label(r"ΔOSI", fontsize=7, rotation=90)
+cbar.ax.tick_params(labelsize=5)
 
 plt.tight_layout()
 plt.savefig(figdir + "fig5defg_rectification.png", dpi=300)
+# Export to PDF too
+plt.savefig(figdir + "fig5defg_rectification.pdf", dpi=300)
 
 # Save data
 write_excel(save_path, data_frames)
-
-
-

@@ -12,6 +12,15 @@ from src.constants import kappa_pre, alpha_pre, kappa_w, alpha_w, n_pre, n_stim
 from src.constants import figdir, stylesheet
 from src.utils import write_excel
 
+# Added code to plot with Arial font in Windows
+import matplotlib
+from matplotlib import rc
+matplotlib.rcParams['pdf.fonttype']=42
+rc('font',**{'family':'serif','serif':['Arial']})
+#matplotlib.rcParams['font.family']='san-serif'
+#rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+#rc('text', usetex=True)
+
 sns.set_context("poster")
 sns.set_palette("colorblind")
 plt.style.use(stylesheet)
@@ -39,6 +48,8 @@ sns.despine(left=True, bottom=True)
 ax.set_xticks([])
 ax.set_yticks([])
 plt.savefig(figdir + "fig5a_pyr_tuning", dpi=300)
+# Export to PDF too
+plt.savefig(figdir + "fig5a_pyr_tuning.pdf", dpi=300)
 
 fig, ax = plt.subplots(figsize=(width, height))
 plt.plot(stimuli, post_rates, color=pink)
@@ -46,6 +57,8 @@ sns.despine(left=True, bottom=True)
 ax.set_xticks([])
 ax.set_yticks([])
 plt.savefig(figdir + "fig5a_pv_tuning", dpi=300)
+# Export to PDF too
+plt.savefig(figdir + "fig5a_pv_tuning.pdf", dpi=300)
 
 # Seperate figs
 stimuli, pre_tuning, pre_rates, pre_rates_multi, weights, post_rates = network(
@@ -70,8 +83,9 @@ sns.despine()
 # Connectivity
 ax[0].set_ylabel("Weight (norm)")
 ax[0].plot(pre_tuning, weights, color="gray")
-ax[0].text(-np.pi, 0.8, r"Pyr$\rightarrow$PV", color="gray")
-ax[0].set_xlabel(r"Stim. direction ($\Delta^\circ$)")
+ax[0].text(-np.pi, 0.8, r"Pyr→PV", color="gray")
+ax[0].set_xlabel(r"Stim. direction (Δ°)")
+ax[0].tick_params(axis='both', which='major', labelsize=5)
 
 # Rates
 ax[1].set_ylabel("Rate (norm)")
@@ -79,9 +93,13 @@ ax[1].plot(pre_tuning, pre_rates, color=blue, label="Pyr")
 ax[1].text(-np.pi, 0.65, "Pyr", color=blue)
 ax[1].text(-np.pi, 0.8, "PV", color=pink)
 ax[1].plot(pre_tuning, post_rates, color=pink, label="PV")
-ax[1].set_xlabel(r"Stim. direction ($\Delta^\circ$)")
+ax[1].set_xlabel(r"Stim. direction (Δ°)")
+ax[1].tick_params(axis='both', which='major', labelsize=5)
 plt.tight_layout()
 plt.savefig(figdir + "fig5bc_network.png", dpi=300)
+# Export to PDF too
+plt.savefig(figdir + "fig5bc_network.pdf", dpi=300)
+
 
 # Save data: Pyr-PV weights, and rates
 data_frames['b']["direction"] = pre_tuning
