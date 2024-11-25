@@ -14,6 +14,12 @@ from src.simulation import bcm_update, simulate_with_plasticity
 from src.metrics import compute_osi
 from src.utils import write_excel
 
+# Added code to plot with Arial font in Windows
+import matplotlib
+from matplotlib import rc
+matplotlib.rcParams['pdf.fonttype'] = 42
+rc('font', **{'family': 'serif', 'serif': ['Arial']})
+
 sns.set_context("poster")
 sns.set_palette("colorblind")
 plt.style.use(stylesheet)
@@ -24,7 +30,7 @@ data_frames = {}
 for panel in ['h', 'i', 'j', 'k']:
     data_frames[panel] = pd.DataFrame()
 
-fig, ax = plt.subplots(1, 4, figsize=(6.2, 1.3), sharey=False)
+fig, ax = plt.subplots(1, 4, figsize=(5.1, 1.3), sharey=False)
 
 # Show the plasticity rule
 pre = 1
@@ -49,6 +55,7 @@ ax[0].annotate(
     arrowprops=dict(arrowstyle="->", lw=0.5, connectionstyle="arc3", color="gray"),
 )
 ax[0].text(3, 0.4, "Threshold", color="gray", rotation=0)
+ax[0].tick_params(axis='both', which='major', labelsize=5)
 
 # Simulate it
 ex_thresholds = [control_th, increased_th]
@@ -76,11 +83,13 @@ for i in [1, 2]:
     else:
         ticks = np.array([-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi])
         ax[i].set_xticks(ticks, np.array(ticks * 180 / np.pi, dtype=int))
-    ax[i].set_xlabel(r"Stim. direction ($\Delta^\circ$)")
+    ax[i].set_xlabel(r"Stim. direction (Δ°)")
 
 ax[2].set_yticks([0, 5, 10, 15])
 ax[2].set_ylabel("Rate (1/s)")
 ax[1].set_ylabel("Weight")
+ax[1].tick_params(axis='both', which='major', labelsize=5)
+ax[2].tick_params(axis='both', which='major', labelsize=5)
 
 print("LTD threshold : OSI")
 thresholds = np.arange(min_th, max_th, dtype=float, step=0.25)
@@ -110,9 +119,11 @@ ax[3].set_ylim([0.3, 0.8])
 ax[3].set_yticks([0.4, 0.6, 0.8])
 ax[3].set_ylabel("Selectivity (OSI)")
 ax[3].set_xlabel("Threshold (1/s)")
-
+ax[3].tick_params(axis='both', which='major', labelsize=5)
 
 fig.tight_layout()
 plt.savefig(figdir + "fig5hijk_plasticity.png", dpi=300)
+# Export to PDF too
+plt.savefig(figdir + "fig5hijk_plasticity.pdf", dpi=300)
 
 write_excel(save_path, data_frames)
